@@ -41,4 +41,4 @@
 - 准备好你的头像文件，并将其上传至 [`src/img`](./src/img) 文件夹下。
   - 文件格式最好为 `jpg`，图片像素大小不超过 `512*512px`。
 - 完成上述步骤后，请新建一个 `Pull Request`，标题格式为 `chore: 添加站点 souta.cc`（souta.cc 请更换成你的域名）。
-- 当 `Pull Request` 被合并后，你的站点将会尽快显示在 [小太的小伙伴们](https://souta.cc/friends) 中。
+- 当 `Pull Request` 被合并后，你的站点将会尽快显示在 [小太的伙伴们](https://souta.cc/friends) 中。
