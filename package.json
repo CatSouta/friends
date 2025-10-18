@@ -1,0 +1,24 @@
+{
+  "name": "friends",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Souta's friends",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CatSouta/friends.git"
+  },
+  "scripts": {
+    "build": "node -r @swc-node/register index.ts"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@swc-node/register": "^1.10.10",
+    "@swc/core": "^1.11.11",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}
