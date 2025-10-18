@@ -1,0 +1,63 @@
+name: Upload images to TencentCloud COS
+
+on:
+  push:
+    paths:
+      - "src/img/**"
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Install COSCLI
+        run: |
+          wget https://cosbrowser.cloud.tencent.com/software/coscli/coscli-linux-amd64
+          chmod +x coscli-linux-amd64
+          sudo mv coscli-linux-amd64 /usr/local/bin/coscli
+
+      - name: Configure COSCLI
+        env:
+          TC_SECRET_ID: ${{ secrets.TC_SECRET_ID }}
+          TC_SECRET_KEY: ${{ secrets.TC_SECRET_KEY }}
+          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+          COS_ENDPOINT: ${{ secrets.COS_ENDPOINT }}
+        run: |
+          cat > ~/.cos.yaml <<EOF
+          cos:
+            base:
+              secretid: ${TC_SECRET_ID}
+              secretkey: ${TC_SECRET_KEY}
+            buckets:
+              - name: ${COS_BUCKET}
+                endpoint: ${COS_ENDPOINT}
+          EOF
+
+      - name: Find added or modified images
+        id: find_files
+        run: |
+          files=$(git diff --name-only --diff-filter=AM HEAD~1 HEAD | grep '^src/img/' || true)
+          echo "found files:"
+          echo "$files"
+          files=$(echo "$files" | tr '\n' ' ')
+          echo "FILES=$files" >> $GITHUB_ENV
+
+      - name: Upload images to COS
+        env:
+          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+        run: |
+          if [ -z "$FILES" ]; then
+            echo "No new or modified images to upload."
+            exit 0
+          fi
+
+          for file in $FILES; do
+            echo "Uploading $file..."
+            dest="souta/friend/${file#src/img/}"
+            coscli cp "$file" "cos://${COS_BUCKET}/${dest}"
+          done
