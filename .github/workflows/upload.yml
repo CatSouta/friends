@@ -1,4 +1,4 @@
-name: Upload images to TencentCloud COS
+name: Upload images to Aliyun OSS
 
 on:
   push:
@@ -15,27 +15,26 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Install COSCLI
+      - name: Install OSSCLI 2.1.2
         run: |
-          wget https://cosbrowser.cloud.tencent.com/software/coscli/coscli-linux-amd64
-          chmod +x coscli-linux-amd64
-          sudo mv coscli-linux-amd64 /usr/local/bin/coscli
+          curl -o ossutil-2.1.2-linux-amd64.zip https://gosspublic.alicdn.com/ossutil/v2/2.1.2/ossutil-2.1.2-linux-amd64.zip
+          unzip ossutil-2.1.2-linux-amd64.zip
+          cd ossutil-2.1.2-linux-amd64
+          chmod 755 ossutil
+          sudo mv ossutil /usr/local/bin/ && sudo ln -s /usr/local/bin/ossutil /usr/bin/ossutil
 
-      - name: Configure COSCLI
+      - name: Configure OSSCLI
         env:
-          TC_SECRET_ID: ${{ secrets.TC_SECRET_ID }}
-          TC_SECRET_KEY: ${{ secrets.TC_SECRET_KEY }}
-          COS_BUCKET: ${{ secrets.COS_BUCKET }}
-          COS_ENDPOINT: ${{ secrets.COS_ENDPOINT }}
+          OSS_ENDPOINT: ${{ secrets.OSS_ENDPOINT }}
+          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
         run: |
-          cat > ~/.cos.yaml <<EOF
-          cos:
-            base:
-              secretid: ${TC_SECRET_ID}
-              secretkey: ${TC_SECRET_KEY}
-            buckets:
-              - name: ${COS_BUCKET}
-                endpoint: ${COS_ENDPOINT}
+          cat > ~/.ossutilconfig <<EOF
+          [Credentials]
+          language=EN
+          endpoint=${OSS_ENDPOINT}
+          accessKeySecret=${OSS_ACCESS_KEY_SECRET}
+          accessKeyID=${OSS_ACCESS_KEY_ID}
           EOF
 
       - name: Find added or modified images
@@ -47,9 +46,9 @@ jobs:
           files=$(echo "$files" | tr '\n' ' ')
           echo "FILES=$files" >> $GITHUB_ENV
 
-      - name: Upload images to COS
+      - name: Upload images to OSS
         env:
-          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+          OSS_BUCKET: ${{ secrets.OSS_BUCKET }}
         run: |
           if [ -z "$FILES" ]; then
             echo "No new or modified images to upload."
@@ -59,5 +58,5 @@ jobs:
           for file in $FILES; do
             echo "Uploading $file..."
             dest="souta/friend/${file#src/img/}"
-            coscli cp "$file" "cos://${COS_BUCKET}/${dest}"
+            ossutil cp "$file" "oss://${OSS_BUCKET}/${dest}" --update
           done
