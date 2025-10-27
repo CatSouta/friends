@@ -19,7 +19,7 @@ type Friend = {
 
     const newFile = file.map((user) => ({
       ...user,
-      img: `https://i1.stslb.com/souta/friend/${user.img}`,
+      img: `https://i0.stslb.com/souta/friend/${user.img}`,
     }));
 
     fs.mkdirSync("./dist", { recursive: true });
