@@ -15,7 +15,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: pnpm/action-setup@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
         with:
           version: 9
 
@@ -26,7 +27,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build links.json
         run: pnpm build
@@ -36,5 +37,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ secrets.CF_WORKER_NAME}} --branch=main
+          command: pages deploy dist --project-name=${{ secrets.CF_PAGES_PROJECT }} --branch=main
           wranglerVersion: latest

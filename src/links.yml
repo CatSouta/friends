@@ -13,11 +13,6 @@
   img: "dwd.moe.jpg"
   desc: "布好布好不？好布好布好！"
 
-- name: "月子喵"
-  url: "https://haozi.moe"
-  img: "haozi.moe.jpg"
-  desc: "喵喵喵~"
-
 - name: "idealclover"
   url: "https://idealclover.top"
   img: "idealclover.top.jpg"
@@ -27,11 +22,6 @@
   url: "https://ohmyga.dev"
   img: "ohmyga.dev.jpg"
   desc: "一只想咸鱼翻身的萌新"
-
-- name: "freejishu"
-  url: "https://www.freejishu.com"
-  img: "freejishu.com.jpg"
-  desc: "Code·Thinking·ACG"
 
 - name: "绫川星凛"
   url: "https://seir.in"
