@@ -29,7 +29,7 @@ type Friend = {
 
       return {
         ...user,
-        img: `https://static.stslb.com/souta/img/friend/${user.img}?w=200&v=${hash}`,
+        img: `https://static.stslb.com/souta/img/friend/${user.img}?v=${hash}&imageMogr2/thumbnail/200x`,
       };
     });
 
