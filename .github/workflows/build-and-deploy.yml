@@ -3,6 +3,7 @@ name: Build and deploy links to Cloudflare Pages
 on:
   push:
     paths:
+      - "index.ts"
       - "src/links.yml"
 
 jobs:
