@@ -4,7 +4,14 @@ on:
   push:
     paths:
       - "src/img/**"
+      - ".github/workflows/upload.yml"
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upload-images
 
 jobs:
   upload:
